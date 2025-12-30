@@ -21,6 +21,7 @@ use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\UserLicenseController;
 use App\Http\Controllers\Admin\LogController as AdminLogController;
 use App\Http\Controllers\WhoisController;
+use App\Http\Controllers\WpPostController;
 use App\Http\Controllers\CertController;
 use App\Http\Controllers\SubdomainController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,10 @@ if (config('shop.enabled')) {
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
     Route::get('/shop/{product:product_code}', [ShopController::class, 'show'])->name('shop.products.show');
 }
+
+// WordPress posts index and single post
+Route::get('/posts', [WpPostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{slug}', [WpPostController::class, 'show'])->name('posts.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
