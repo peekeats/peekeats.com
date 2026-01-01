@@ -39,7 +39,11 @@
                         <p class="lead">{{ \Illuminate\Support\Str::limit($product->description, 120) }}</p>
                     @endif
                     <div>
-                        <a class="play-btn" href="{{ url('/shop/' . ($product->product_code ?? '')) }}">View</a>
+                        @php
+                            $href = $product->url ?? url('/shop/' . ($product->product_code ?? ''));
+                            $isExternal = ! empty($product->url);
+                        @endphp
+                        <a class="play-btn" href="{{ $href }}" @if($isExternal) target="_blank" rel="noopener" @endif>View</a>
                     </div>
                 </div>
             @endforeach
@@ -53,11 +57,18 @@
                     <div>
                         @php
                             $link = '#';
-                            if (is_array($game) && !empty($game['product_code'])) {
+                            $isExternal = false;
+                            if (is_object($game) && !empty($game->url)) {
+                                $link = $game->url;
+                                $isExternal = true;
+                            } elseif (is_array($game) && !empty($game['url'])) {
+                                $link = $game['url'];
+                                $isExternal = true;
+                            } elseif (is_array($game) && !empty($game['product_code'])) {
                                 $link = url('/shop/' . $game['product_code']);
                             }
                         @endphp
-                        <a class="play-btn" href="{{ $link }}">View</a>
+                        <a class="play-btn" href="{{ $link }}" @if($isExternal) target="_blank" rel="noopener" @endif>View</a>
                     </div>
                 </div>
             @endforeach
