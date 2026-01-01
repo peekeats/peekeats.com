@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
+        if (Schema::connection('wordpress')->hasTable('users')) {
+            return;
+        }
+
         Schema::connection('wordpress')->create('users', function (Blueprint $table) {
             $table->bigIncrements('ID');
             $table->string('user_login', 60)->default('');
@@ -45,6 +49,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::connection('wordpress')->dropIfExists('users');
+        if (Schema::connection('wordpress')->hasTable('users')) {
+            Schema::connection('wordpress')->dropIfExists('users');
+        }
     }
 };
