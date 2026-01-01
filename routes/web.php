@@ -55,6 +55,9 @@ if (config('shop.enabled')) {
     Route::get('/shop/{product:product_code}', [ShopController::class, 'show'])->name('shop.products.show');
 }
 
+// Games frontpage (assimilated content from nikniq.com)
+Route::get('/games', [App\Http\Controllers\GamesController::class, 'index'])->name('games.index');
+
 // WordPress posts index and single post
 if (config('posts.enabled')) {
     Route::get('/posts', [WpPostController::class, 'index'])->name('posts.index');

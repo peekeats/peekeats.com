@@ -258,6 +258,9 @@
                         @if(config('apilab.enabled') && Route::has('api.lab'))
                             <a href="{{ route('api.lab') }}" class="{{ request()->routeIs('api.lab') ? 'nav-active' : '' }}">API Lab</a>
                         @endif
+                        @if(Route::has('games.index'))
+                            <a href="{{ route('games.index') }}" class="{{ request()->routeIs('games.index') ? 'nav-active' : '' }}">Games</a>
+                        @endif
                         @if(config('posts.enabled') && Route::has('posts.index'))
                             <a href="{{ route('posts.index') }}" class="{{ request()->routeIs('posts.index') || request()->routeIs('posts.show') ? 'nav-active' : '' }}">Posts</a>
                         @endif
