@@ -29,8 +29,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $theme = config('frontpage.theme', 'default');
     $view = 'themes.' . $theme . '.frontpage';
-
     if (view()->exists($view)) {
+        if ($theme === 'games') {
+            $category = config('games.category', env('GAMES_CATEGORY', 'Game'));
+            $products = \App\Models\Product::where('category', $category)->get();
+            return view($view, ['products' => $products]);
+        }
+
         return view($view);
     }
 
@@ -57,17 +62,7 @@ if (config('shop.enabled')) {
 
 // Games frontpage
 if (config('games.enabled')) {
-    Route::get('/games', function () {
-        $theme = config('frontpage.theme', 'default');
-        if ($theme === 'games') {
-            $view = 'themes.games.frontpage';
-            if (view()->exists($view)) {
-                return view($view);
-            }
-        }
-
-        return app()->call([App\Http\Controllers\GamesController::class, 'index']);
-    })->name('games.index');
+    Route::get('/games', [App\Http\Controllers\GamesController::class, 'index'])->name('games.index');
 }
 
 // WordPress posts index and single post
