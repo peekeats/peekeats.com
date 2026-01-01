@@ -14,6 +14,10 @@
             <input type="text" name="vendor" value="{{ old('vendor', $product->vendor ?? '') }}">
         </label>
         <label>
+            <span>Product URL (admin only)</span>
+            <input type="url" name="url" value="{{ old('url', $product->url ?? '') }}" placeholder="https://example.com/product-page">
+        </label>
+        <label>
             <span>Category</span>
             <input type="text" name="category" value="{{ old('category', $product->category ?? '') }}">
         </label>

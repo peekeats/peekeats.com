@@ -23,6 +23,7 @@ class UpdateProductRequest extends FormRequest
                 Rule::unique('products', 'product_code')->ignore($this->route('product')->id ?? null),
             ],
             'vendor' => ['nullable', 'string', 'max:255'],
+            'url' => ['nullable', 'url', 'max:2048'],
             'category' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
