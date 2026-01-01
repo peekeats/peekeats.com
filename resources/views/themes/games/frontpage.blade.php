@@ -11,7 +11,22 @@
             <p style="margin-top:1rem;"><a href="https://nikniq.com" class="link" target="_blank" rel="noopener">Browse more on nikniq.com →</a></p>
         </div>
     </header>
+    {{-- Curated games list from config/games.php --}}
+    @if(!empty($games ?? []))
+        <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+            @foreach($games as $game)
+                <div class="card">
+                    <h3>{{ $game['title'] }}</h3>
+                    <p class="lead">{{ $game['description'] }}</p>
+                    @if(!empty($game['url']))
+                        <p><a class="link" href="{{ $game['url'] }}" target="_blank" rel="noopener">View on nikniq.com →</a></p>
+                    @endif
+                </div>
+            @endforeach
+        </section>
+    @endif
 
+    {{-- Assimilated feed items from nikniq.com --}}
     <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
         @if(!empty($items ?? []))
             @foreach($items as $item)

@@ -16,6 +16,8 @@ class GamesController extends Controller
             $items = [];
         }
 
-        return view('themes.games.frontpage', compact('items'));
+        $games = config('games.list', []);
+
+        return view('themes.games.frontpage', compact('items', 'games'));
     }
 }
