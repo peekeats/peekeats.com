@@ -29,4 +29,3 @@
             <p class="lead">To surface external content without copying copyrighted text, fetch a feed or API in a controller, transform data, and pass it to this view. Example: use the `Http` facade to request JSON/RSS and render titles, thumbnails, and links here.</p>
         </div>
     </section>
-            @foreach($items as $item)
