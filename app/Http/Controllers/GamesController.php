@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Services\NikniqClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GamesController extends Controller
 {
     public function index(NikniqClient $nik)
     {
+        if (! config('games.enabled')) {
+            abort(404);
+        }
         // Curated products from config
         $games = config('games.list', []);
 

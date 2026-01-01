@@ -56,7 +56,9 @@ if (config('shop.enabled')) {
 }
 
 // Games frontpage (assimilated content from nikniq.com)
-Route::get('/games', [App\Http\Controllers\GamesController::class, 'index'])->name('games.index');
+if (config('games.enabled')) {
+    Route::get('/games', [App\Http\Controllers\GamesController::class, 'index'])->name('games.index');
+}
 
 // WordPress posts index and single post
 if (config('posts.enabled')) {

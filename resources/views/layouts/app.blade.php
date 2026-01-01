@@ -258,7 +258,7 @@
                         @if(config('apilab.enabled') && Route::has('api.lab'))
                             <a href="{{ route('api.lab') }}" class="{{ request()->routeIs('api.lab') ? 'nav-active' : '' }}">API Lab</a>
                         @endif
-                        @if(Route::has('games.index'))
+                        @if(config('games.enabled') && Route::has('games.index'))
                             <a href="{{ route('games.index') }}" class="{{ request()->routeIs('games.index') ? 'nav-active' : '' }}">Games</a>
                         @endif
                         @if(config('posts.enabled') && Route::has('posts.index'))
@@ -273,7 +273,7 @@
                         @if(config('apilab.enabled') && Route::has('api.lab'))
                             <a href="{{ route('api.lab') }}" class="{{ request()->routeIs('api.lab') ? 'nav-active' : '' }}">API Lab</a>
                         @endif
-                        @if(Route::has('games.index'))
+                        @if(config('games.enabled') && Route::has('games.index'))
                             <a href="{{ route('games.index') }}" class="{{ request()->routeIs('games.index') ? 'nav-active' : '' }}">Games</a>
                         @endif
                         @if(config('posts.enabled') && Route::has('posts.index'))

@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // Enable or disable the Games feature.
+    'enabled' => env('GAMES_ENABLED', true),
+
     // Curated list of games to show in the Games theme.
     // Each entry: title, slug (optional), description, url (optional), thumbnail (optional).
     'list' => [
