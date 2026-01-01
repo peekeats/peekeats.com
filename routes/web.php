@@ -56,8 +56,10 @@ if (config('shop.enabled')) {
 }
 
 // WordPress posts index and single post
-Route::get('/posts', [WpPostController::class, 'index'])->name('posts.index');
-Route::get('/posts/{slug}', [WpPostController::class, 'show'])->name('posts.show');
+if (config('posts.enabled')) {
+    Route::get('/posts', [WpPostController::class, 'index'])->name('posts.index');
+    Route::get('/posts/{slug}', [WpPostController::class, 'show'])->name('posts.show');
+}
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
