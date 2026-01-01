@@ -36,7 +36,7 @@
                 <div class="arcade-card">
                     <h3>{{ $product->name }}</h3>
                     @if(!empty($product->description))
-                        <p class="lead">{{ \\Illuminate\\Support\\Str::limit($product->description, 120) }}</p>
+                        <p class="lead">{{ \Illuminate\Support\Str::limit($product->description, 120) }}</p>
                     @endif
                     <div>
                         <a class="play-btn" href="{{ url('/shop/' . ($product->product_code ?? '')) }}">View</a>
@@ -48,7 +48,7 @@
                 <div class="arcade-card">
                     <h3>{{ $game['title'] ?? $game['name'] }}</h3>
                     @if(!empty($game['description']))
-                        <p class="lead">{{ \\Illuminate\\Support\\Str::limit($game['description'], 120) }}</p>
+                        <p class="lead">{{ \Illuminate\Support\Str::limit($game['description'], 120) }}</p>
                     @endif
                     <div>
                         @php
