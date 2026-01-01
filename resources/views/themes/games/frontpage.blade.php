@@ -34,6 +34,19 @@
         @if(!empty($products ?? []) && count($products))
             @foreach($products as $product)
                 <div class="arcade-card">
+                    @php
+                        $desc = strtolower($product->description ?? '');
+                        if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
+                            $icon = asset('assets/games/rocket.svg');
+                        } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
+                            $icon = asset('assets/games/puzzle.svg');
+                        } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
+                            $icon = asset('assets/games/racer.svg');
+                        } else {
+                            $icon = asset('assets/games/joystick.svg');
+                        }
+                    @endphp
+                    <img src="{{ $icon }}" alt="{{ $product->name }}" style="width:64px;height:64px;display:block;margin-bottom:0.5rem;">
                     <h3>{{ $product->name }}</h3>
                     @if(!empty($product->description))
                         <p class="lead">{{ \Illuminate\Support\Str::limit($product->description, 120) }}</p>
@@ -50,6 +63,21 @@
         @elseif(!empty($games ?? []) && count($games))
             @foreach($games as $game)
                 <div class="arcade-card">
+                    @php
+                        $gdesc = '';
+                        if (is_array($game)) { $gdesc = strtolower($game['description'] ?? ''); }
+                        elseif (is_object($game)) { $gdesc = strtolower($game->description ?? ''); }
+                        if (\Illuminate\Support\Str::contains($gdesc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
+                            $gicon = asset('assets/games/rocket.svg');
+                        } elseif (\Illuminate\Support\Str::contains($gdesc, ['puzz','puzzle','match','brain'])) {
+                            $gicon = asset('assets/games/puzzle.svg');
+                        } elseif (\Illuminate\Support\Str::contains($gdesc, ['race','racer','racing','car','drive'])) {
+                            $gicon = asset('assets/games/racer.svg');
+                        } else {
+                            $gicon = asset('assets/games/joystick.svg');
+                        }
+                    @endphp
+                    <img src="{{ $gicon }}" alt="{{ $game['title'] ?? $game['name'] }}" style="width:64px;height:64px;display:block;margin-bottom:0.5rem;">
                     <h3>{{ $game['title'] ?? $game['name'] }}</h3>
                     @if(!empty($game['description']))
                         <p class="lead">{{ \Illuminate\Support\Str::limit($game['description'], 120) }}</p>
