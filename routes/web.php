@@ -55,7 +55,7 @@ if (config('shop.enabled')) {
     Route::get('/shop/{product:product_code}', [ShopController::class, 'show'])->name('shop.products.show');
 }
 
-// Games frontpage (assimilated content from nikniq.com)
+// Games frontpage
 if (config('games.enabled')) {
     Route::get('/games', [App\Http\Controllers\GamesController::class, 'index'])->name('games.index');
 }

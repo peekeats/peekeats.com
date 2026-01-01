@@ -15,7 +15,7 @@ class GamesSeeder extends Seeder
             [
                 'name' => 'Space Runner',
                 'product_code' => 'GAME-SPR-01',
-                'vendor' => 'nikniq',
+                'vendor' => 'External',
                 'category' => $category,
                 'description' => 'A fast-paced endless runner set among asteroids and drifting satellites.',
                 'price' => 0.00,
@@ -26,7 +26,7 @@ class GamesSeeder extends Seeder
             [
                 'name' => 'Puzzle Grove',
                 'product_code' => 'GAME-PZG-01',
-                'vendor' => 'nikniq',
+                'vendor' => 'External',
                 'category' => $category,
                 'description' => 'Relaxing puzzle challenges with handcrafted levels and soothing visuals.',
                 'price' => 0.00,
@@ -37,7 +37,7 @@ class GamesSeeder extends Seeder
             [
                 'name' => 'Neon Racers',
                 'product_code' => 'GAME-NRC-01',
-                'vendor' => 'nikniq',
+                'vendor' => 'External',
                 'category' => $category,
                 'description' => 'Retro-style top-down racing with tight controls and online leaderboards.',
                 'price' => 0.00,
