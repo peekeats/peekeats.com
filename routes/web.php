@@ -102,6 +102,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+        // Media management
+        Route::get('media', [App\Http\Controllers\Admin\MediaController::class, 'index'])->name('media.index');
+        Route::get('media/create', [App\Http\Controllers\Admin\MediaController::class, 'create'])->name('media.create');
+        Route::post('media', [App\Http\Controllers\Admin\MediaController::class, 'store'])->name('media.store');
+        Route::delete('media/{media}', [App\Http\Controllers\Admin\MediaController::class, 'destroy'])->name('media.destroy');
 });
 
 Route::post('/dashboard/licenses', [UserLicenseController::class, 'store'])
@@ -146,4 +151,9 @@ Route::prefix('admin')
         if (config('admin.external_logs_enabled')) {
             Route::get('external-logs', [ExternalLogController::class, 'index'])->name('external-logs.index');
         }
+        // Admin media management
+        Route::get('media', [App\Http\Controllers\Admin\MediaController::class, 'index'])->name('media.index');
+        Route::get('media/create', [App\Http\Controllers\Admin\MediaController::class, 'create'])->name('media.create');
+        Route::post('media', [App\Http\Controllers\Admin\MediaController::class, 'store'])->name('media.store');
+        Route::delete('media/{media}', [App\Http\Controllers\Admin\MediaController::class, 'destroy'])->name('media.destroy');
     });
