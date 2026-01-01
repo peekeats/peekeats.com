@@ -13,11 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        if (Schema::connection('wordpress')->hasTable('users')) {
+        $conn = Schema::connection('wordpress');
+        $prefix = config('database.connections.wordpress.prefix', '') ?: '';
+        $plain = 'users';
+        $prefixed = $prefix . $plain;
+
+        if ($conn->hasTable($plain) || ($prefix && $conn->hasTable($prefixed))) {
             return;
         }
 
-        Schema::connection('wordpress')->create('users', function (Blueprint $table) {
+        $conn->create($plain, function (Blueprint $table) {
             $table->bigIncrements('ID');
             $table->string('user_login', 60)->default('');
             $table->string('user_pass', 255)->default('');
@@ -49,8 +54,18 @@ return new class extends Migration
      */
     public function down()
     {
-        if (Schema::connection('wordpress')->hasTable('users')) {
-            Schema::connection('wordpress')->dropIfExists('users');
+        $conn = Schema::connection('wordpress');
+        $prefix = config('database.connections.wordpress.prefix', '') ?: '';
+        $plain = 'users';
+        $prefixed = $prefix . $plain;
+
+        if ($conn->hasTable($plain)) {
+            $conn->dropIfExists($plain);
+            return;
+        }
+
+        if ($prefix && $conn->hasTable($prefixed)) {
+            $conn->dropIfExists($prefixed);
         }
     }
 };
