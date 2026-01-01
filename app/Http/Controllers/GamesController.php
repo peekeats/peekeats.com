@@ -9,15 +9,24 @@ class GamesController extends Controller
 {
     public function index(NikniqClient $nik)
     {
-        $items = [];
-        try {
-            $items = $nik->fetchLatest(12);
-        } catch (\Exception $e) {
-            $items = [];
-        }
-
+        // Curated products from config
         $games = config('games.list', []);
 
-        return view('themes.games.frontpage', compact('items', 'games'));
+        // Map to a product-like structure for the listing view
+        $products = collect($games)->map(function ($g) {
+            return (object) [
+                'name' => $g['title'] ?? ($g['name'] ?? 'Untitled'),
+                'product_code' => $g['slug'] ?? Str::slug($g['title'] ?? 'game'),
+                'description' => $g['description'] ?? null,
+                'price' => $g['price'] ?? 0.00,
+                'duration_months' => $g['duration_months'] ?? 0,
+                'category' => $g['category'] ?? 'Game',
+                'url' => $g['url'] ?? null,
+            ];
+        })->all();
+
+        return view('games.index', [
+            'products' => $products,
+        ]);
     }
 }
