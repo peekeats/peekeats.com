@@ -27,7 +27,7 @@
                         <h3 style="margin:0;">@if(!empty($product->url))<a href="{{ $product->url }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">@endif{{ $product->name }}@if(!empty($product->url))</a>@endif</h3>
                         <p style="margin:0;color:var(--muted);font-family:monospace;">{{ $product->product_code ?? '' }}</p>
                     </div>
-                    <p style="margin:0;">{{ $product->description ? \\Illuminate\\Support\\Str::limit($product->description, 140) : 'No description provided yet.' }}</p>
+                    <p style="margin:0;">{{ $product->description ? \Illuminate\Support\Str::limit($product->description, 140) : 'No description provided yet.' }}</p>
                     <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
                         @if($product->price && $product->price > 0)
                             <span style="font-size:2rem;font-weight:700;">${{ number_format($product->price, 2) }}<span style="font-size:1rem;font-weight:500;color:var(--muted);">/item</span></span>
