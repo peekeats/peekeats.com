@@ -32,7 +32,9 @@ return new class extends Migration
 
             // Match WP defaults where practical
             $table->engine = 'MyISAM';
-            $table->charset = 'utf8mb3';
+            // Use utf8mb4 to match application DB collation and avoid charset/collation mismatch
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
         });
     }
 
