@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WpPost;
 use Illuminate\Http\Request;
 
 class WpPostController extends Controller
 {
     public function index(Request $request)
     {
-        $posts = WpPost::query()
-            ->where('post_status', 'publish')
-            ->where('post_type', 'post')
+        if (! config('posts.enabled', true)) {
+            abort(404);
+        }
+
+        $model = config('posts.model', \App\Models\WpPost::class);
+
+        $posts = $model::query()
+            ->published()
             ->orderBy('post_date', 'desc')
             ->paginate(10);
 
@@ -20,9 +24,14 @@ class WpPostController extends Controller
 
     public function show($slug)
     {
-        $post = WpPost::where('post_name', $slug)
-            ->where('post_status', 'publish')
-            ->where('post_type', 'post')
+        if (! config('posts.enabled', true)) {
+            abort(404);
+        }
+
+        $model = config('posts.model', \App\Models\WpPost::class);
+
+        $post = $model::where('post_name', $slug)
+            ->published()
             ->firstOrFail();
 
         return view('posts.show', compact('post'));
