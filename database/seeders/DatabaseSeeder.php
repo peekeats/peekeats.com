@@ -91,5 +91,8 @@ class DatabaseSeeder extends Seeder
                 'domain' => 'example.com',
             ]);
         }
+
+        // Seed example game products (if not present)
+        $this->call(\Database\Seeders\GamesSeeder::class);
     }
 }
