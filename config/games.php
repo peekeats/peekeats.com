@@ -4,6 +4,13 @@ return [
     // Enable or disable the Games feature.
     'enabled' => env('GAMES_ENABLED', true),
 
+    // Category name in the `products` table used to identify games.
+    'category' => env('GAMES_CATEGORY', 'Game'),
+
+    // If no products are found in the DB for the above category, optionally
+    // fall back to the curated list below.
+    'fallback_to_config' => true,
+
     // Curated list of games to show in the Games theme.
     // Each entry: title, slug (optional), description, url (optional), thumbnail (optional).
     'list' => [
