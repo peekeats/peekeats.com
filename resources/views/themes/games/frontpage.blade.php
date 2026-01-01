@@ -37,13 +37,19 @@
                     @php
                         $desc = strtolower($product->description ?? '');
                         if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
-                            $icon = asset('assets/games/rocket.svg');
+                            $file = 'rocket.svg';
                         } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
-                            $icon = asset('assets/games/puzzle.svg');
+                            $file = 'puzzle.svg';
                         } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
-                            $icon = asset('assets/games/racer.svg');
+                            $file = 'racer.svg';
                         } else {
-                            $icon = asset('assets/games/joystick.svg');
+                            $file = 'joystick.svg';
+                        }
+                        $media = \App\Models\Media::where('filename', $file)->latest()->first();
+                        if ($media) {
+                            $icon = \Illuminate\Support\Facades\Storage::url($media->path);
+                        } else {
+                            $icon = asset('assets/games/' . $file);
                         }
                     @endphp
                     <img src="{{ $icon }}" alt="{{ $product->name }}" style="width:64px;height:64px;display:block;margin-bottom:0.5rem;">
@@ -68,13 +74,19 @@
                         if (is_array($game)) { $gdesc = strtolower($game['description'] ?? ''); }
                         elseif (is_object($game)) { $gdesc = strtolower($game->description ?? ''); }
                         if (\Illuminate\Support\Str::contains($gdesc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
-                            $gicon = asset('assets/games/rocket.svg');
+                            $gfile = 'rocket.svg';
                         } elseif (\Illuminate\Support\Str::contains($gdesc, ['puzz','puzzle','match','brain'])) {
-                            $gicon = asset('assets/games/puzzle.svg');
+                            $gfile = 'puzzle.svg';
                         } elseif (\Illuminate\Support\Str::contains($gdesc, ['race','racer','racing','car','drive'])) {
-                            $gicon = asset('assets/games/racer.svg');
+                            $gfile = 'racer.svg';
                         } else {
-                            $gicon = asset('assets/games/joystick.svg');
+                            $gfile = 'joystick.svg';
+                        }
+                        $gmedia = \App\Models\Media::where('filename', $gfile)->latest()->first();
+                        if ($gmedia) {
+                            $gicon = \Illuminate\Support\Facades\Storage::url($gmedia->path);
+                        } else {
+                            $gicon = asset('assets/games/' . $gfile);
                         }
                     @endphp
                     <img src="{{ $gicon }}" alt="{{ $game['title'] ?? $game['name'] }}" style="width:64px;height:64px;display:block;margin-bottom:0.5rem;">
