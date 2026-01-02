@@ -35,10 +35,10 @@
             /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
             .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
             .arcade-tile::before { content: ""; display:block; padding-top:56.25%; /* 16:9 */ }
-            .arcade-tile::after { content:""; position:absolute; inset:0; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.35) inset; pointer-events:none; transition:opacity .18s ease; opacity:0; }
+            .arcade-tile::after { content:""; position:absolute; inset:0; border-radius:12px; pointer-events:none; transition:opacity .18s ease, box-shadow .18s ease; opacity:0; box-shadow:0 10px 30px rgba(0,0,0,0.35) inset; }
             .arcade-tile:focus-visible { outline:2px solid rgba(0,209,255,0.9); outline-offset:4px; transform:translateY(-4px) scale(1.01); }
             .arcade-tile:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 18px 60px rgba(2,6,23,0.6); }
-            .arcade-tile:hover::after { opacity:1; }
+            .arcade-tile:hover::after { opacity:1; box-shadow: inset 0 10px 30px rgba(0,0,0,0.35), 0 0 28px rgba(0,209,255,0.22), 0 0 64px rgba(0,209,255,0.14); }
 
             .arcade-tile-overlay { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; background:linear-gradient(180deg, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.6) 100%); color:#fff; transition:background .18s ease, transform .18s ease; }
             .arcade-tile:hover .arcade-tile-overlay { background:linear-gradient(180deg, rgba(0,0,0,0.05) 10%, rgba(0,0,0,0.72) 100%); }
