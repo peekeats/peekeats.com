@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -26,7 +27,11 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request): RedirectResponse
     {
-        Product::create($request->validated());
+        $data = $request->validated();
+        if (! Schema::hasColumn('products', 'media_id')) {
+            unset($data['media_id']);
+        }
+        Product::create($data);
 
         return redirect()
             ->route('admin.products.index')
@@ -41,7 +46,11 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->validated());
+        $data = $request->validated();
+        if (! Schema::hasColumn('products', 'media_id')) {
+            unset($data['media_id']);
+        }
+        $product->update($data);
 
         return redirect()
             ->route('admin.products.index')
