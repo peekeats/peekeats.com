@@ -21,9 +21,9 @@
 
         /* Prominent search bar */
         .games-search-form { display:flex; gap:0.5rem; align-items:center; max-width:960px; margin:0 auto; }
-        .games-search-input { flex:1; padding:0.9rem 1rem; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.6)); color:#fff; font-size:1.05rem; box-shadow:0 8px 30px rgba(2,6,23,0.65); }
-        .games-search-input::placeholder { color:rgba(255,255,255,0.7); }
-        .games-clear-btn { background:#ff3b81; color:#fff; padding:0.5rem 0.8rem; border-radius:8px; text-decoration:none; font-weight:800; }
+        .games-search-input { flex:1; padding:0.9rem 1rem; border-radius:10px; border:3px solid rgba(10,10,10,0.92); background:#ffffff; color:#0b1220; font-size:1.05rem; box-shadow:none; }
+        .games-search-input::placeholder { color:rgba(11,18,32,0.45); }
+        .games-clear-btn { background:#ff3b81; color:#fff; padding:0.5rem 0.8rem; border-radius:8px; text-decoration:none; font-weight:800; border:2px solid rgba(11,18,32,0.92); }
 
         /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
         .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); aspect-ratio:16/9; align-self:start; }
