@@ -32,12 +32,25 @@
     {{-- Primary games grid: prefer $products (DB) then fallback to config $games --}}
     <section class="arcade-grid">
         <style>
-            .arcade-tile { display:block; position:relative; height:220px; border-radius:12px; background-size:cover; background-position:center; overflow:hidden; transition:transform .18s ease, box-shadow .18s ease; }
-            .arcade-tile:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 12px 40px rgba(2,6,23,0.5); }
-            .arcade-tile-overlay { display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; height:100%; background:linear-gradient(180deg, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.55) 100%); color:#fff; }
-            .arcade-tile-overlay h3 { margin:0 0 0.35rem 0; font-size:1.15rem; font-weight:800; }
-            .arcade-tile-overlay p { margin:0 0 0.5rem 0; color:rgba(255,255,255,0.85); font-size:0.9rem; }
-            .arcade-tile .play-btn { display:inline-block; background:#00d1ff;color:#021122;padding:0.5rem 0.65rem;border-radius:8px;font-weight:800;text-decoration:none; }
+            /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
+            .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
+            .arcade-tile::before { content: ""; display:block; padding-top:56.25%; /* 16:9 */ }
+            .arcade-tile::after { content:""; position:absolute; inset:0; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.35) inset; pointer-events:none; transition:opacity .18s ease; opacity:0; }
+            .arcade-tile:focus-visible { outline:2px solid rgba(0,209,255,0.9); outline-offset:4px; transform:translateY(-4px) scale(1.01); }
+            .arcade-tile:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 18px 60px rgba(2,6,23,0.6); }
+            .arcade-tile:hover::after { opacity:1; }
+
+            .arcade-tile-overlay { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; background:linear-gradient(180deg, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.6) 100%); color:#fff; transition:background .18s ease, transform .18s ease; }
+            .arcade-tile:hover .arcade-tile-overlay { background:linear-gradient(180deg, rgba(0,0,0,0.05) 10%, rgba(0,0,0,0.72) 100%); }
+
+            .arcade-tile-overlay h3 { margin:0 0 0.35rem 0; font-size:1.15rem; font-weight:800; transform:translateY(0); transition:transform .18s ease; }
+            .arcade-tile:hover .arcade-tile-overlay h3 { transform:translateY(-4px); }
+
+            .arcade-tile-overlay p { margin:0 0 0.5rem 0; color:rgba(255,255,255,0.95); font-size:0.9rem; opacity:0.95; transition:opacity .18s ease, transform .18s ease; }
+            .arcade-tile:hover .arcade-tile-overlay p { transform:translateY(-2px); opacity:1; }
+
+            .arcade-tile .play-btn { display:inline-block; background:#00d1ff;color:#021122;padding:0.5rem 0.65rem;border-radius:8px;font-weight:800;text-decoration:none; transition:transform .15s ease, box-shadow .15s ease; box-shadow:0 6px 18px rgba(0,209,255,0.12); }
+            .arcade-tile:hover .play-btn { transform:translateY(-3px) scale(1.02); box-shadow:0 12px 34px rgba(0,209,255,0.22); }
         </style>
         @if(!empty($products ?? []) && count($products))
             @foreach($products as $product)
