@@ -40,7 +40,7 @@
                     <form method="POST" action="{{ route('admin.media.destroy', $m) }}" onsubmit="return confirm('Delete this media?');">
                         @csrf
                         @method('DELETE')
-                        <button class="link" type="submit" style="color:var(--error)">Delete</button>
+                        <button type="submit" title="Delete" aria-label="Delete {{ $m->filename }}" style="background:var(--error);color:#fff;padding:0.45rem 0.8rem;border-radius:0.6rem;border:none;cursor:pointer;font-weight:600;">Delete</button>
                     </form>
                 </div>
             </div>
