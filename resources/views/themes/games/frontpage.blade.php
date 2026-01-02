@@ -35,21 +35,33 @@
             @foreach($products as $product)
                 <div class="arcade-card">
                     @php
-                        $desc = strtolower($product->description ?? '');
-                        if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
-                            $file = 'rocket.svg';
-                        } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
-                            $file = 'puzzle.svg';
-                        } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
-                            $file = 'racer.svg';
-                        } else {
-                            $file = 'joystick.svg';
+                        // Prefer product-attached media when available
+                        $icon = null;
+                        if (! empty($product->media) && ! empty($product->media->path)) {
+                            try {
+                                $icon = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path);
+                            } catch (\Exception $e) {
+                                $icon = null;
+                            }
                         }
-                        $media = \App\Models\Media::where('filename', $file)->latest()->first();
-                        if ($media) {
-                            $icon = \Illuminate\Support\Facades\Storage::url($media->path);
-                        } else {
-                            $icon = asset('assets/games/' . $file);
+
+                        if (! $icon) {
+                            $desc = strtolower($product->description ?? '');
+                            if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
+                                $file = 'rocket.svg';
+                            } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
+                                $file = 'puzzle.svg';
+                            } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
+                                $file = 'racer.svg';
+                            } else {
+                                $file = 'joystick.svg';
+                            }
+                            $media = \App\Models\Media::where('filename', $file)->latest()->first();
+                            if ($media) {
+                                $icon = \Illuminate\Support\Facades\Storage::disk($media->disk)->url($media->path);
+                            } else {
+                                $icon = asset('assets/games/' . $file);
+                            }
                         }
                     @endphp
                     <img src="{{ $icon }}" alt="{{ $product->name }}" style="width:64px;height:64px;display:block;margin-bottom:0.5rem;">
