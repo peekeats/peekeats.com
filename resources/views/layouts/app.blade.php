@@ -240,7 +240,7 @@
 <body>
     <div class="page">
         <nav class="site-nav">
-            <a href="{{ route('home') }}" class="brand">Glitchdata</a>
+            <a href="{{ route('home') }}" class="brand">{{ config('site.name') }}</a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
                 <span>Menu</span>
                 <span aria-hidden="true">☰</span>
