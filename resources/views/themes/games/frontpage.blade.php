@@ -33,7 +33,7 @@
     <section class="arcade-grid">
         <style>
             /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
-            .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
+            .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
             .arcade-tile::before { content: ""; display:block; padding-top:56.25%; /* 16:9 */ }
             .arcade-tile::after { content:""; position:absolute; inset:0; border-radius:12px; pointer-events:none; transition:opacity .18s ease, box-shadow .18s ease; opacity:0; box-shadow:0 10px 30px rgba(0,0,0,0.35) inset; }
             .arcade-tile:focus-visible { outline:2px solid rgba(0,209,255,0.9); outline-offset:4px; transform:translateY(-4px) scale(1.01); }
