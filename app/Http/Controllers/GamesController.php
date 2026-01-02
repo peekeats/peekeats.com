@@ -23,7 +23,7 @@ class GamesController extends Controller
 
         // Do not fall back to config list by default; only show DB products.
 
-        return view('games.index', [
+        return view('themes.games.frontpage', [
             'products' => $products,
         ]);
     }
