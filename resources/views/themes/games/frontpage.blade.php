@@ -43,7 +43,7 @@
                 <p id="games-results-count" style="color:rgba(255,255,255,0.8);margin-top:0.5rem;font-size:0.95rem;">Showing {{ $products->count() }} result{{ $products->count() === 1 ? '' : 's' }}@if(!empty($q)) for "{{ e($q) }}"@endif</p>
             @endif
         </div>
-        <div id="games-tiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        <div id="games-tiles" style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
         <style>
             /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
             .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
