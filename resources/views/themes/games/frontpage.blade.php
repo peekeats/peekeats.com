@@ -40,8 +40,8 @@
             .arcade-tile:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 18px 60px rgba(2,6,23,0.6); }
             .arcade-tile:hover::after { opacity:1; box-shadow: inset 0 10px 30px rgba(0,0,0,0.35), 0 0 28px rgba(0,209,255,0.22), 0 0 64px rgba(0,209,255,0.14); }
 
-            .arcade-tile-overlay { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; background:linear-gradient(180deg, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.6) 100%); color:#fff; transition:background .18s ease, transform .18s ease; }
-            .arcade-tile:hover .arcade-tile-overlay { background:linear-gradient(180deg, rgba(0,0,0,0.05) 10%, rgba(0,0,0,0.72) 100%); }
+            .arcade-tile-overlay { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; background:linear-gradient(180deg, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.18) 100%); color:#fff; transition:background .18s ease, transform .18s ease; }
+            .arcade-tile:hover .arcade-tile-overlay { background:linear-gradient(180deg, rgba(0,0,0,0.02) 10%, rgba(0,0,0,0.28) 100%); }
 
             .arcade-tile-overlay h3 { margin:0 0 0.35rem 0; font-size:1.15rem; font-weight:800; transform:translateY(0); transition:transform .18s ease; }
             .arcade-tile:hover .arcade-tile-overlay h3 { transform:translateY(-4px); }
