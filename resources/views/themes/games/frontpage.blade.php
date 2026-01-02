@@ -20,7 +20,7 @@
         .play-btn { display:inline-block; margin-top:0.75rem; background:#00d1ff; color:#021122; padding:0.5rem 0.75rem; border-radius:6px; text-decoration:none; font-weight:700; }
 
         /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
-        .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
+        .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); aspect-ratio:16/9; align-self:start; }
         .arcade-tile::before { content: ""; display:block; padding-top:56.25%; /* 16:9 */ }
         .arcade-tile::after { content:""; position:absolute; inset:0; border-radius:12px; pointer-events:none; transition:opacity .18s ease, box-shadow .18s ease; opacity:0; box-shadow:0 10px 30px rgba(0,0,0,0.35) inset; }
         .arcade-tile:focus-visible { outline:2px solid rgba(0,209,255,0.9); outline-offset:4px; transform:translateY(-4px) scale(1.01); }
@@ -55,7 +55,6 @@
         <div style="grid-column:1/-1; padding:0 1rem 0 1rem;">
             <form method="GET" action="{{ route('games.index') }}" style="display:flex;gap:0.5rem;align-items:center;">
                 <input name="q" value="{{ old('q', $q ?? request('q')) }}" placeholder="Search games by name, description or code..." aria-label="Search games" style="flex:1;padding:0.6rem 0.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.45);color:#fff;">
-                <button type="submit" class="play-btn" style="padding:0.5rem 0.8rem;">Search</button>
                 @if(!empty($q))
                     <a href="{{ route('games.index') }}" class="play-btn" style="background:#ff3b81;color:#fff;padding:0.45rem 0.8rem;margin-left:0.25rem;">Clear</a>
                 @endif
@@ -64,7 +63,7 @@
                 <p id="games-results-count" style="color:rgba(255,255,255,0.8);margin-top:0.5rem;font-size:0.95rem;">Showing {{ $products->count() }} result{{ $products->count() === 1 ? '' : 's' }}@if(!empty($q)) for "{{ e($q) }}"@endif</p>
             @endif
         </div>
-        <div id="games-tiles" style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        <div id="games-tiles" style="grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;align-items:start;">
         @if(!empty($products ?? []) && count($products))
             @foreach($products as $product)
                 @php
