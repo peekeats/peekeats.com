@@ -31,52 +31,43 @@
 
     {{-- Primary games grid: prefer $products (DB) then fallback to config $games --}}
     <section class="arcade-grid">
+        <style>
+            .arcade-tile { display:block; position:relative; height:220px; border-radius:12px; background-size:cover; background-position:center; overflow:hidden; transition:transform .18s ease, box-shadow .18s ease; }
+            .arcade-tile:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 12px 40px rgba(2,6,23,0.5); }
+            .arcade-tile-overlay { display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; height:100%; background:linear-gradient(180deg, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.55) 100%); color:#fff; }
+            .arcade-tile-overlay h3 { margin:0 0 0.35rem 0; font-size:1.15rem; font-weight:800; }
+            .arcade-tile-overlay p { margin:0 0 0.5rem 0; color:rgba(255,255,255,0.85); font-size:0.9rem; }
+            .arcade-tile .play-btn { display:inline-block; background:#00d1ff;color:#021122;padding:0.5rem 0.65rem;border-radius:8px;font-weight:800;text-decoration:none; }
+        </style>
         @if(!empty($products ?? []) && count($products))
             @foreach($products as $product)
-                <div class="arcade-card">
-                    @php
-                        // Prefer product-attached media when available
-                        $icon = null;
-                        if (! empty($product->media) && ! empty($product->media->path)) {
-                            try {
-                                $icon = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path);
-                            } catch (\Exception $e) {
-                                $icon = null;
-                            }
-                        }
-
-                        if (! $icon) {
-                            $desc = strtolower($product->description ?? '');
-                            if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
-                                $file = 'rocket.svg';
-                            } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
-                                $file = 'puzzle.svg';
-                            } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
-                                $file = 'racer.svg';
-                            } else {
-                                $file = 'joystick.svg';
-                            }
-                            $media = \App\Models\Media::where('filename', $file)->latest()->first();
-                            if ($media) {
-                                $icon = \Illuminate\Support\Facades\Storage::disk($media->disk)->url($media->path);
-                            } else {
-                                $icon = asset('assets/games/' . $file);
-                            }
-                        }
-                    @endphp
-                    <img src="{{ $icon }}" alt="{{ $product->name }}" style="width:64px;height:64px;display:block;margin-bottom:0.5rem;">
-                    <h3>{{ $product->name }}</h3>
-                    @if(!empty($product->description))
-                        <p class="lead">{{ \Illuminate\Support\Str::limit($product->description, 120) }}</p>
-                    @endif
-                    <div>
-                        @php
-                            $href = $product->url ?? url('/shop/' . ($product->product_code ?? ''));
-                            $isExternal = ! empty($product->url);
-                        @endphp
-                        <a class="play-btn" href="{{ $href }}" @if($isExternal) target="_blank" rel="noopener" @endif>View</a>
+                @php
+                    // determine image source (prefer attached media)
+                    $tileImg = null;
+                    if (! empty($product->media) && ! empty($product->media->path)) {
+                        try { $tileImg = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path); } catch (\Exception $e) { $tileImg = null; }
+                    }
+                    if (! $tileImg) {
+                        $desc = strtolower($product->description ?? '');
+                        if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) { $file = 'rocket.svg'; }
+                        elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) { $file = 'puzzle.svg'; }
+                        elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) { $file = 'racer.svg'; }
+                        else { $file = 'joystick.svg'; }
+                        $m = \App\Models\Media::where('filename', $file)->latest()->first();
+                        $tileImg = $m ? \Illuminate\Support\Facades\Storage::disk($m->disk)->url($m->path) : asset('assets/games/' . $file);
+                    }
+                    $href = $product->url ?? url('/shop/' . ($product->product_code ?? ''));
+                    $isExternal = ! empty($product->url);
+                @endphp
+                <a href="{{ $href }}" @if($isExternal) target="_blank" rel="noopener" @endif class="arcade-tile" style="background-image:url('{{ $tileImg }}');">
+                    <div class="arcade-tile-overlay">
+                        <h3>{{ $product->name }}</h3>
+                        @if(!empty($product->description))
+                            <p>{{ \Illuminate\Support\Str::limit($product->description, 100) }}</p>
+                        @endif
+                        <span class="play-btn">View</span>
                     </div>
-                </div>
+                </a>
             @endforeach
         @elseif(!empty($games ?? []) && count($games))
             @foreach($games as $game)
