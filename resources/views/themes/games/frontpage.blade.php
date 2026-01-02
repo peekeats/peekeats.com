@@ -19,6 +19,12 @@
         .arcade-badge { display:inline-block; padding:0.25rem 0.5rem; background:#ff3b81; color:#fff; border-radius:4px; font-size:0.8rem; font-weight:700; }
         .play-btn { display:inline-block; margin-top:0.75rem; background:#00d1ff; color:#021122; padding:0.5rem 0.75rem; border-radius:6px; text-decoration:none; font-weight:700; }
 
+        /* Prominent search bar */
+        .games-search-form { display:flex; gap:0.5rem; align-items:center; max-width:960px; margin:0 auto; }
+        .games-search-input { flex:1; padding:0.9rem 1rem; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.6)); color:#fff; font-size:1.05rem; box-shadow:0 8px 30px rgba(2,6,23,0.65); }
+        .games-search-input::placeholder { color:rgba(255,255,255,0.7); }
+        .games-clear-btn { background:#ff3b81; color:#fff; padding:0.5rem 0.8rem; border-radius:8px; text-decoration:none; font-weight:800; }
+
         /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
         .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); aspect-ratio:16/9; align-self:start; }
         .arcade-tile::before { content: ""; display:block; padding-top:56.25%; /* 16:9 */ }
@@ -53,10 +59,10 @@
     {{-- Primary games grid: prefer $products (DB) then fallback to config $games --}}
     <section class="arcade-grid">
         <div style="grid-column:1/-1; padding:0 1rem 0 1rem;">
-            <form method="GET" action="{{ route('games.index') }}" style="display:flex;gap:0.5rem;align-items:center;">
-                <input name="q" value="{{ old('q', $q ?? request('q')) }}" placeholder="Search games by name, description or code..." aria-label="Search games" style="flex:1;padding:0.6rem 0.75rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.45);color:#fff;">
+            <form method="GET" action="{{ route('games.index') }}" class="games-search-form">
+                <input name="q" class="games-search-input" value="{{ old('q', $q ?? request('q')) }}" placeholder="Search games by name, description or code..." aria-label="Search games">
                 @if(!empty($q))
-                    <a href="{{ route('games.index') }}" class="play-btn" style="background:#ff3b81;color:#fff;padding:0.45rem 0.8rem;margin-left:0.25rem;">Clear</a>
+                    <a href="{{ route('games.index') }}" class="games-clear-btn">Clear</a>
                 @endif
             </form>
             @if(isset($products) )
