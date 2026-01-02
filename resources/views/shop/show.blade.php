@@ -12,8 +12,36 @@
 <header class="hero">
     <div>
         <p class="eyebrow">Shop</p>
-        <h1>{{ $product->name }}</h1>
-        <p class="lead">{{ $product->description ?: 'No marketing copy available yet.' }}</p>
+        <div style="display:flex;gap:1rem;align-items:center;">
+            @php
+                $hero = null;
+                if (! empty($product->media) && ! empty($product->media->path)) {
+                    try { $hero = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path); } catch (\Exception $e) { $hero = null; }
+                }
+                if (! $hero) {
+                    $desc = strtolower($product->description ?? '');
+                    if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
+                        $file = 'rocket.svg';
+                    } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
+                        $file = 'puzzle.svg';
+                    } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
+                        $file = 'racer.svg';
+                    } else {
+                        $file = 'joystick.svg';
+                    }
+                    $m = \App\Models\Media::where('filename', $file)->latest()->first();
+                    if ($m) { $hero = \Illuminate\Support\Facades\Storage::disk($m->disk)->url($m->path); }
+                    else { $hero = asset('assets/games/' . $file); }
+                }
+            @endphp
+            <div style="width:96px;height:96px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid rgba(15,23,42,0.04);">
+                <img src="{{ $hero }}" alt="{{ $product->name }}" style="max-width:100%;max-height:100%;object-fit:contain;">
+            </div>
+            <div>
+                <h1>{{ $product->name }}</h1>
+                <p class="lead">{{ $product->description ?: 'No marketing copy available yet.' }}</p>
+            </div>
+        </div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.5rem;align-items:center;">
         @if(config('shop.enabled'))

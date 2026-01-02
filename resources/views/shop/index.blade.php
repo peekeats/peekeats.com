@@ -28,10 +28,36 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;">
             @forelse ($products as $product)
                 <article style="border:1px solid rgba(15,23,42,0.08);border-radius:1rem;padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;background:var(--bg);">
-                    <div>
-                        <p class="eyebrow" style="margin-bottom:0.25rem;color:var(--muted);">{{ $product->category ?? 'Software' }}</p>
-                        <h3 style="margin:0;"><a href="{{ route('shop.products.show', $product) }}" style="color:inherit;text-decoration:none;">{{ $product->name }}</a></h3>
-                        <p style="margin:0;color:var(--muted);font-family:monospace;">{{ $product->product_code }}</p>
+                    <div style="display:flex;gap:0.75rem;align-items:center;">
+                        @php
+                            $thumb = null;
+                            if (! empty($product->media) && ! empty($product->media->path)) {
+                                try { $thumb = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path); } catch (\Exception $e) { $thumb = null; }
+                            }
+                            if (! $thumb) {
+                                $desc = strtolower($product->description ?? '');
+                                if (\Illuminate\Support\Str::contains($desc, ['space','asteroid','rocket','satellite','cosmic','galaxy'])) {
+                                    $file = 'rocket.svg';
+                                } elseif (\Illuminate\Support\Str::contains($desc, ['puzz','puzzle','match','brain'])) {
+                                    $file = 'puzzle.svg';
+                                } elseif (\Illuminate\Support\Str::contains($desc, ['race','racer','racing','car','drive'])) {
+                                    $file = 'racer.svg';
+                                } else {
+                                    $file = 'joystick.svg';
+                                }
+                                $m = \App\Models\Media::where('filename', $file)->latest()->first();
+                                if ($m) { $thumb = \Illuminate\Support\Facades\Storage::disk($m->disk)->url($m->path); }
+                                else { $thumb = asset('assets/games/' . $file); }
+                            }
+                        @endphp
+                        <div style="width:64px;height:64px;flex:0 0 64px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid rgba(15,23,42,0.04);">
+                            <img src="{{ $thumb }}" alt="{{ $product->name }}" style="max-width:100%;max-height:100%;object-fit:contain;">
+                        </div>
+                        <div>
+                            <p class="eyebrow" style="margin-bottom:0.25rem;color:var(--muted);">{{ $product->category ?? 'Software' }}</p>
+                            <h3 style="margin:0;"><a href="{{ route('shop.products.show', $product) }}" style="color:inherit;text-decoration:none;">{{ $product->name }}</a></h3>
+                            <p style="margin:0;color:var(--muted);font-family:monospace;">{{ $product->product_code }}</p>
+                        </div>
                     </div>
                     <p style="margin:0;">{{ $product->description ? \Illuminate\Support\Str::limit($product->description, 140) : 'No marketing copy provided yet.' }}</p>
                     <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
