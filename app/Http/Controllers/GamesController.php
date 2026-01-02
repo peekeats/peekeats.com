@@ -16,6 +16,7 @@ class GamesController extends Controller
         $category = config('games.category', 'Game');
 
         $products = Product::query()
+            ->with('media')
             ->where('category', $category)
             ->orderBy('name')
             ->get();

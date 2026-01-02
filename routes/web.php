@@ -32,7 +32,7 @@ Route::get('/', function () {
     if (view()->exists($view)) {
         if ($theme === 'games') {
             $category = config('games.category', env('GAMES_CATEGORY', 'Game'));
-            $products = \App\Models\Product::where('category', $category)->get();
+            $products = \App\Models\Product::with('media')->where('category', $category)->orderBy('name')->get();
             return view($view, ['products' => $products]);
         }
 
