@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Media;
 
 class Product extends Model
 {
@@ -14,6 +15,7 @@ class Product extends Model
         'product_code',
         'vendor',
         'url',
+        'media_id',
         'category',
         'description',
         'price',
@@ -28,5 +30,10 @@ class Product extends Model
     public function licenses()
     {
         return $this->hasMany(License::class);
+    }
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class);
     }
 }

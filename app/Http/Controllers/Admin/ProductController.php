@@ -20,7 +20,8 @@ class ProductController extends Controller
 
     public function create(): View
     {
-        return view('admin.products.create');
+        $media = \App\Models\Media::orderBy('created_at', 'desc')->limit(50)->get();
+        return view('admin.products.create', compact('media'));
     }
 
     public function store(StoreProductRequest $request): RedirectResponse
@@ -34,7 +35,8 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        return view('admin.products.edit', compact('product'));
+        $media = \App\Models\Media::orderBy('created_at', 'desc')->limit(50)->get();
+        return view('admin.products.edit', compact('product', 'media'));
     }
 
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
