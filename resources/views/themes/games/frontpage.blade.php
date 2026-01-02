@@ -40,9 +40,10 @@
                 @endif
             </form>
             @if(isset($products) )
-                <p style="color:rgba(255,255,255,0.8);margin-top:0.5rem;font-size:0.95rem;">Showing {{ $products->count() }} result{{ $products->count() === 1 ? '' : 's' }}@if(!empty($q)) for "{{ e($q) }}"@endif</p>
+                <p id="games-results-count" style="color:rgba(255,255,255,0.8);margin-top:0.5rem;font-size:0.95rem;">Showing {{ $products->count() }} result{{ $products->count() === 1 ? '' : 's' }}@if(!empty($q)) for "{{ e($q) }}"@endif</p>
             @endif
         </div>
+        <div id="games-tiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
         <style>
             /* Tile with fixed aspect ratio (16:9). Uses ::before to reserve space. */
             .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); }
@@ -146,6 +147,67 @@
                 <p class="lead">There are no games available right now. Check back soon or add games in the admin panel.</p>
             </div>
         @endif
+        </div>
+
+        <script>
+            (function(){
+                const input = document.querySelector('input[name="q"]');
+                if (!input) return;
+                const tiles = document.getElementById('games-tiles');
+                const resultsCount = document.getElementById('games-results-count');
+                let debounceTimer = null;
+
+                function renderTile(p){
+                    const a = document.createElement('a');
+                    a.className = 'arcade-tile';
+                    a.href = p.url || '#';
+                    if (p.isExternal) { a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); }
+                    a.style.backgroundImage = `url('${p.thumbnail}')`;
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'arcade-tile-overlay';
+                    const h3 = document.createElement('h3'); h3.textContent = p.name || 'Untitled';
+                    overlay.appendChild(h3);
+                    if (p.description) {
+                        const ptag = document.createElement('p'); ptag.textContent = p.description.substring(0,100); overlay.appendChild(ptag);
+                    }
+                    const btn = document.createElement('span'); btn.className = 'play-btn'; btn.textContent = 'View'; overlay.appendChild(btn);
+                    a.appendChild(overlay);
+                    return a;
+                }
+
+                function renderResults(list){
+                    tiles.innerHTML = '';
+                    if (!list || !list.length) {
+                        const empty = document.createElement('div'); empty.className = 'arcade-card';
+                        empty.innerHTML = '<h3>No games found</h3><p class="lead">Try a different search or check back later.</p>';
+                        tiles.appendChild(empty);
+                        if (resultsCount) resultsCount.textContent = 'Showing 0 results';
+                        return;
+                    }
+                    list.forEach(item => tiles.appendChild(renderTile(item)));
+                    if (resultsCount) resultsCount.textContent = `Showing ${list.length} result${list.length===1? '':'s'}${input.value? ' for "'+input.value+'"':''}`;
+                }
+
+                async function doSearch(){
+                    const q = input.value.trim();
+                    const url = `{{ route('games.index') }}` + (q ? '?q=' + encodeURIComponent(q) : '');
+                    try {
+                        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                        if (!res.ok) { return; }
+                        const data = await res.json();
+                        renderResults(data || []);
+                    } catch (e) {
+                        console.error('Live search error', e);
+                    }
+                }
+
+                input.addEventListener('input', function(){
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(doSearch, 300);
+                });
+            })();
+        </script>
     </section>
 
 @endsection
