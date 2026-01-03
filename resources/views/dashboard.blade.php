@@ -89,9 +89,7 @@
         </div>
     @endif
 
-    @if (! config('license.enabled') || ! config('license.purchase_enabled'))
-        <p style="margin-top:1.25rem;color:var(--muted);">Licenses are not available.</p>
-    @elseif ($products->isEmpty())
+    @if ($products->isEmpty())
         <p style="margin-top:1.25rem;color:var(--muted);">No products are available for purchase right now. Please check back later.</p>
     @else
         @if ($paypalEnabled)
