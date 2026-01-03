@@ -33,6 +33,20 @@ Route::get('/', function () {
         if ($theme === 'games') {
             $category = config('games.category', env('GAMES_CATEGORY', 'Game'));
             $products = \App\Models\Product::with('media')->where('category', $category)->orderBy('name')->get();
+
+            if (auth()->check()) {
+                $favIds = \App\Models\Favourite::where('user_id', auth()->id())
+                    ->where('favoritable_type', \App\Models\Product::class)
+                    ->pluck('favoritable_id')
+                    ->toArray();
+
+                if (! empty($favIds)) {
+                    $products = $products->sortByDesc(function ($p) use ($favIds) {
+                        return in_array($p->id, $favIds) ? 1 : 0;
+                    })->values();
+                }
+            }
+
             return view($view, ['products' => $products]);
         }
 
