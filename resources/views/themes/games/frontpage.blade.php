@@ -96,7 +96,7 @@
                         @if(!empty($product->description))
                             <p>{{ \Illuminate\Support\Str::limit($product->description, 100) }}</p>
                         @endif
-                        <span class="play-btn">View</span>
+                        <span class="play-btn">{{ $product->name }}</span>
                     </div>
                 </a>
             @endforeach
@@ -142,7 +142,7 @@
                                 $link = url('/shop/' . $game['product_code']);
                             }
                         @endphp
-                        <a class="play-btn" href="{{ $link }}" @if($isExternal) target="_blank" rel="noopener" @endif>View</a>
+                        <a class="play-btn" href="{{ $link }}" @if($isExternal) target="_blank" rel="noopener" @endif>{{ $game['title'] ?? $game['name'] }}</a>
                     </div>
                 </div>
             @endforeach
@@ -176,7 +176,7 @@
                     if (p.description) {
                         const ptag = document.createElement('p'); ptag.textContent = p.description.substring(0,100); overlay.appendChild(ptag);
                     }
-                    const btn = document.createElement('span'); btn.className = 'play-btn'; btn.textContent = 'View'; overlay.appendChild(btn);
+                    const btn = document.createElement('span'); btn.className = 'play-btn'; btn.textContent = p.name || 'View'; overlay.appendChild(btn);
                     a.appendChild(overlay);
                     return a;
                 }
