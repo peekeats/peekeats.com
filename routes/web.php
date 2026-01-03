@@ -51,9 +51,11 @@ Route::post('/whois/lookup', [WhoisController::class, 'lookup'])->name('whois.lo
 Route::post('/cert/lookup', [CertController::class, 'lookup'])->name('cert.lookup');
 // Subdomains lookup endpoint used by the subdomains frontpage theme
 Route::post('/subdomains/lookup', [SubdomainController::class, 'lookup'])->name('subdomains.lookup');
-Route::get('/license/{license_code}', PublicLicenseValidatorController::class)
-    ->name('licenses.validator');
-Route::get('/license/validate/{key}', LicenseValidatorJsonController::class);
+if (config('license.enabled') && config('license.public_validation')) {
+    Route::get('/license/{license_code}', PublicLicenseValidatorController::class)
+        ->name('licenses.validator');
+    Route::get('/license/validate/{key}', LicenseValidatorJsonController::class);
+}
 
 if (config('shop.enabled')) {
     Route::get('/shop', [ShopController::class, 'index'])->name('shop');
@@ -109,9 +111,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('media/{media}', [App\Http\Controllers\Admin\MediaController::class, 'destroy'])->name('media.destroy');
 });
 
-Route::post('/dashboard/licenses', [UserLicenseController::class, 'store'])
-    ->middleware('auth')
-    ->name('licenses.store');
+if (config('license.enabled') && config('license.purchase_enabled')) {
+    Route::post('/dashboard/licenses', [UserLicenseController::class, 'store'])
+        ->middleware('auth')
+        ->name('licenses.store');
+}
 
 Route::post('/paypal/orders', [PayPalOrderController::class, 'store'])
     ->middleware('auth')
@@ -125,9 +129,11 @@ Route::post('/stripe/complete', [StripePaymentController::class, 'complete'])
     ->middleware('auth')
     ->name('stripe.complete');
 
-Route::get('/dashboard/licenses/{license}', [UserLicenseController::class, 'show'])
-    ->middleware('auth')
-    ->name('licenses.show');
+if (config('license.enabled')) {
+    Route::get('/dashboard/licenses/{license}', [UserLicenseController::class, 'show'])
+        ->middleware('auth')
+        ->name('licenses.show');
+}
 
 Route::middleware('auth')->group(function () {
     Route::get('/email-test', [EmailTestController::class, 'create'])->name('email.test');
@@ -138,8 +144,10 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'admin'])
     ->group(function () {
-        Route::redirect('/', '/admin/licenses')->name('home');
-        Route::resource('licenses', AdminLicenseController::class)->except(['show']);
+        if (config('license.admin_enabled')) {
+            Route::redirect('/', '/admin/licenses')->name('home');
+            Route::resource('licenses', AdminLicenseController::class)->except(['show']);
+        }
         Route::resource('products', AdminProductController::class)->except(['show']);
         Route::resource('users', AdminUserController::class)->except(['show']);
         if (config('admin.servers_enabled')) {
