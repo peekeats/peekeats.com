@@ -197,26 +197,27 @@
         <span style="font-size:0.9rem;color:var(--muted);">Quick access to your saved games</span>
     </div>
 
-    <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-        @if(isset($favorites) && $favorites->count())
-            @foreach($favorites as $fav)
-                @php
-                    $product = $fav;
-                    $thumb = null;
-                    if (! empty($product->media) && ! empty($product->media->path)) {
-                        try { $thumb = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path); } catch (\Exception $e) { $thumb = null; }
-                    }
-                    $thumb = $thumb ?: asset('assets/games/joystick.svg');
-                    $href = $product->url ?? url('/shop/' . ($product->product_code ?? ''));
-                @endphp
-                <a href="{{ $href }}" class="link" style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.5rem 0.75rem;border-radius:0.75rem;background:var(--panel);box-shadow:0 6px 18px rgba(15,23,42,0.06);">
-                    <img src="{{ $thumb }}" alt="{{ $product->name }}" style="width:40px;height:28px;object-fit:cover;border-radius:6px;" />
-                    <span style="font-weight:700;">{{ $product->name }}</span>
-                </a>
-            @endforeach
-        @else
-            <div style="color:var(--muted);">You haven't favourited any games yet.</div>
-        @endif
+    <div style="margin-top:1rem;">
+        <div class="favorites-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem;">
+            @if(isset($favorites) && $favorites->count())
+                @foreach($favorites as $fav)
+                    @php
+                        $product = $fav;
+                        $thumb = null;
+                        if (! empty($product->media) && ! empty($product->media->path)) {
+                            try { $thumb = \Illuminate\Support\Facades\Storage::disk($product->media->disk)->url($product->media->path); } catch (\Exception $e) { $thumb = null; }
+                        }
+                        $thumb = $thumb ?: asset('assets/games/joystick.svg');
+                        $href = $product->url ?? url('/shop/' . ($product->product_code ?? ''));
+                    @endphp
+                    <a href="{{ $href }}" class="fav-tile" style="display:block;position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background-image:url('{{ $thumb }}');background-size:cover;background-position:center;">
+                        <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:0.6rem;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.5));color:#fff;font-weight:700;">{{ $product->name }}</div>
+                    </a>
+                @endforeach
+            @else
+                <div style="color:var(--muted);">You haven't favourited any games yet.</div>
+            @endif
+        </div>
     </div>
 </section>
 
