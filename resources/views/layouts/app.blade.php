@@ -183,6 +183,9 @@
             border-radius: 6px;
         }
         .favorite-btn[aria-pressed="true"] { color: #ff3860; font-weight:700; }
+        .favorite-btn .icon { width:18px; height:18px; display:inline-block; vertical-align:middle; }
+        .favorite-btn .icon path { fill: transparent; stroke: #ff3b81; stroke-width:1.4; transition:fill .12s ease, stroke .12s ease; }
+        .favorite-btn[aria-pressed="true"] .icon path { fill: #ff3860; stroke: #ff1540; }
         .banner {
             border-radius: 1rem;
             padding: 1rem 1.25rem;

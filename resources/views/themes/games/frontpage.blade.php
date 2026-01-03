@@ -100,7 +100,11 @@
                             <span class="play-btn">{{ $product->name }}</span>
                             @auth
                                 @php $fav = $product->isFavoritedBy(auth()->user()); @endphp
-                                <button type="button" class="link button-reset favorite-btn" data-type="product" data-id="{{ $product->id }}" aria-pressed="{{ $fav ? 'true' : 'false' }}">@if($fav)♥@else♡@endif</button>
+                                <button type="button" class="link button-reset favorite-btn" data-type="product" data-id="{{ $product->id }}" aria-pressed="{{ $fav ? 'true' : 'false' }}" title="Toggle favourite">
+                                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path d="M12 21s-7-4.35-9.5-7.02C-1 9.92 4 4 8.5 7.5 12 10.5 12 10.5 12 10.5s0 0 3.5-3c4.5-3.5 9.5 2.42 5.5 6.48C19 16.65 12 21 12 21z" />
+                                    </svg>
+                                </button>
                             @endauth
                         </div>
                     </div>
@@ -238,7 +242,7 @@
                             if (!res.ok) throw new Error('Request failed');
                             const json = await res.json();
                             btn.setAttribute('aria-pressed', json.favorited ? 'true' : 'false');
-                            btn.textContent = json.favorited ? '♥' : '♡';
+                            // visual handled via CSS on [aria-pressed]
                         } catch (e) {
                             console.error('Favourite toggle error', e);
                         }
