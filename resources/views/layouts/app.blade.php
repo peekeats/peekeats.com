@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'GD Login')</title>
-    <?php $currentTheme = config('frontpage.theme', 'default'); ?>
-    <link rel="icon" href="{{ $currentTheme === 'games' ? asset('assets/games/favicon.svg') : asset('glitchdata_logo1.png') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --bg: #f5f7ff;
-            --panel: #ffffff;
-            --panel-alt: #0b1b3f;
-            --text: #0f172a;
+                @else
+                    @if(config('shop.enabled'))
+                        <button type="button" class="link button-reset" onclick="window.location='{{ url('/shop') }}'">Shop</button>
+                    @endif
+                        @if(config('apilab.enabled') && Route::has('api.lab'))
+                            <button type="button" class="link button-reset" onclick="window.location='{{ route('api.lab') }}'">API Lab</button>
+                        @endif
+                        @if(config('games.enabled') && Route::has('games.index'))
+                            <button type="button" class="link button-reset" onclick="window.location='{{ route('games.index') }}'">Games</button>
+                        @endif
+                        @if(config('posts.enabled') && Route::has('posts.index'))
+                            <button type="button" class="link button-reset" onclick="window.location='{{ route('posts.index') }}'">Posts</button>
+                        @endif
+                    <button type="button" class="link button-reset" onclick="window.location='{{ route('login') }}'">Login</button>
+                    <button type="button" class="link button-reset" onclick="window.location='{{ route('register') }}'">Register</button>
+                @endauth
             --muted: #6b7280;
             --primary: #2563eb;
             --primary-dark: #1e40af;
