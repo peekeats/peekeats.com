@@ -16,6 +16,7 @@
         body {
             margin: 0;
             min-height: 100vh;
+            font-family: Figtree, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.18), transparent 45%),
                 radial-gradient(circle at 80% 0%, rgba(22, 163, 74, 0.15), transparent 40%),
                 var(--bg);
