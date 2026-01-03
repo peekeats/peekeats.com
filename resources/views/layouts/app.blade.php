@@ -241,6 +241,13 @@
             border-color: var(--primary-dark);
             box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
         }
+        /* Pagination (Laravel paginator default uses Tailwind-like classes) */
+        nav[aria-label] ul, nav[aria-label] .pagination { display:flex; gap:0.5rem; list-style:none; padding:0; margin:0; align-items:center; }
+        nav[aria-label] a, nav[aria-label] span { display:inline-flex; align-items:center; justify-content:center; padding:0.55rem 0.85rem; border-radius:0.8rem; text-decoration:none; font-weight:700; min-width:44px; }
+        nav[aria-label] a { background:#fff; border:1px solid rgba(15,23,42,0.08); color:var(--text); box-shadow:0 6px 16px rgba(15,23,42,0.06); }
+        nav[aria-label] a:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(15,23,42,0.09); }
+        nav[aria-label] .active span, nav[aria-label] span[aria-current] { background:var(--primary); color:#fff; border-color:var(--primary-dark); box-shadow:0 10px 24px rgba(37,99,235,0.18); }
+        @media (max-width:540px) { nav[aria-label] ul { gap:0.25rem; } nav[aria-label] a, nav[aria-label] span { padding:0.45rem 0.6rem; font-size:0.95rem; min-width:36px; } }
         /* Shared arcade tile styles (used by games frontpage and dashboard favorites) */
         .arcade-tile { display:block; position:relative; width:100%; border-radius:12px; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#000; overflow:hidden; transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s cubic-bezier(.2,.9,.2,1); aspect-ratio:16/9; align-self:start; }
         .arcade-tile::before { content: ""; display:block; padding-top:56.25%; }
