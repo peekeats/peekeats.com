@@ -47,7 +47,6 @@
     </section>
 @endif
 
-@if (config('license.enabled') && config('license.purchase_enabled'))
 <section class="card">
     <h2>Account details</h2>
     <dl class="details">
@@ -70,6 +69,7 @@
     </dl>
 </section>
 
+@if (config('license.enabled') && config('license.purchase_enabled'))
 <section class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
         <div>
