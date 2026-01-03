@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('site.name') }}</title>
     <style>
     :root{
@@ -172,6 +173,16 @@
             cursor: pointer;
         }
         .link.button-reset:hover { text-decoration: underline; }
+        .favorite-btn {
+            background: none;
+            border: none;
+            padding: 0.15rem 0.35rem;
+            font-size: 1.05rem;
+            color: #ff3b81;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        .favorite-btn[aria-pressed="true"] { color: #ff3860; font-weight:700; }
         .banner {
             border-radius: 1rem;
             padding: 1rem 1.25rem;
