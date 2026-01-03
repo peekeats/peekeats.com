@@ -15,12 +15,8 @@
 <section class="card" style="max-width:720px;">
     <p style="margin-top:0;color:var(--muted);">If this wasn’t you, consider changing your password and enabling two-factor authentication.</p>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem;">
-        <a href="{{ route('login') }}" class="link" style="display:inline-flex;align-items:center;gap:0.35rem;font-weight:700;">
-            <span>Sign in again</span>
-        </a>
-        <a href="{{ route('register') }}" class="link" style="display:inline-flex;align-items:center;gap:0.35rem;">
-            <span>Create an account</span>
-        </a>
+        <button type="button" onclick="window.location='{{ route('login') }}'">Sign in again</button>
+        <button type="button" onclick="window.location='{{ route('register') }}'">Create an account</button>
     </div>
 </section>
 @endsection
