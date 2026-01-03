@@ -252,7 +252,6 @@
         </table>
     </div>
 </section>
-@endif
 @endsection
 
 @push('scripts')
