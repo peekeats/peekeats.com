@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\License;
 use App\Models\Product;
+use App\Models\Favourite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -13,6 +14,16 @@ class DashboardController extends Controller
     {
         $licenseEnabled = (bool) config('license.enabled');
         $purchaseEnabled = $licenseEnabled && (bool) config('license.purchase_enabled');
+
+        $favorites = collect();
+        if ($user = Auth::user()) {
+            $favorites = Favourite::with('favoritable.media')
+                ->where('user_id', $user->id)
+                ->where('favoritable_type', Product::class)
+                ->get()
+                ->map(fn($f) => $f->favoritable)
+                ->filter();
+        }
 
         return view('dashboard', [
             'user' => Auth::user(),
@@ -26,6 +37,7 @@ class DashboardController extends Controller
             'stripeCurrency' => config('stripe.currency', 'USD'),
             'paypalEnabled' => $purchaseEnabled && (bool) (config('payment.providers.paypal.enabled') && config('paypal.client_id')),
             'stripeEnabled' => $purchaseEnabled && (bool) (config('payment.providers.stripe.enabled') && config('stripe.public_key') && config('stripe.secret')),
+            'favorites' => $favorites,
         ]);
     }
 }
