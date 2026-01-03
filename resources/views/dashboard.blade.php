@@ -47,6 +47,7 @@
     </section>
 @endif
 
+@if (config('license.enabled') && config('license.purchase_enabled'))
 <section class="card">
     <h2>Account details</h2>
     <dl class="details">
@@ -136,9 +137,9 @@
                 <p style="color:var(--error);font-weight:600;">Set PAYPAL_CLIENT_ID and PAYPAL_SECRET in your environment file to enable checkout.</p>
             @endif
         </form>
-        @endif
+            @endif
 
-        @if ($stripeEnabled)
+            @if ($stripeEnabled)
         <div style="margin-top:1.5rem;padding:1rem;border:1px solid rgba(15,23,42,0.08);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
                 <div>
@@ -187,7 +188,9 @@
         @endif
     @endif
     </section>
+@endif
 
+@if (config('license.enabled'))
 <section class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
         <div>
@@ -252,6 +255,7 @@
         </table>
     </div>
 </section>
+@endif
 @endsection
 
 @push('scripts')
