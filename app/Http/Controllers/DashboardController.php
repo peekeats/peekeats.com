@@ -11,19 +11,21 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
+        $licenseEnabled = (bool) config('license.enabled');
+        $purchaseEnabled = $licenseEnabled && (bool) config('license.purchase_enabled');
+
         return view('dashboard', [
             'user' => Auth::user(),
-            'licenses' => License::with(['product', 'domains'])
-                ->where('user_id', Auth::id())
-                ->orderBy('expires_at')
-                ->get(),
-            'products' => Product::orderBy('name')->get(),
+            'licenses' => $licenseEnabled
+                ? License::with(['product', 'domains'])->where('user_id', Auth::id())->orderBy('expires_at')->get()
+                : collect(),
+            'products' => $purchaseEnabled ? Product::orderBy('name')->get() : collect(),
             'paypalClientId' => config('paypal.client_id'),
             'paypalCurrency' => config('paypal.currency', 'USD'),
             'stripePublicKey' => config('stripe.public_key'),
             'stripeCurrency' => config('stripe.currency', 'USD'),
-            'paypalEnabled' => (bool) (config('payment.providers.paypal.enabled') && config('paypal.client_id')),
-            'stripeEnabled' => (bool) (config('payment.providers.stripe.enabled') && config('stripe.public_key') && config('stripe.secret')),
+            'paypalEnabled' => $purchaseEnabled && (bool) (config('payment.providers.paypal.enabled') && config('paypal.client_id')),
+            'stripeEnabled' => $purchaseEnabled && (bool) (config('payment.providers.stripe.enabled') && config('stripe.public_key') && config('stripe.secret')),
         ]);
     }
 }

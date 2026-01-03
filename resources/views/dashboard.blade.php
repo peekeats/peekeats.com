@@ -32,12 +32,16 @@
         <div style="margin-top:1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.5rem;">
             <a class="link" href="{{ route('admin.users.index') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Manage users</a>
             <a class="link" href="{{ route('admin.products.index') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Manage products</a>
-            <a class="link" href="{{ route('admin.licenses.index') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Manage licenses</a>
+            @if(config('license.enabled') && config('license.admin_enabled'))
+                <a class="link" href="{{ route('admin.licenses.index') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Manage licenses</a>
+            @endif
             @if (config('admin.servers_enabled'))
                 <a class="link" href="{{ route('admin.servers.index') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Manage servers</a>
             @endif
             <a class="link" href="{{ route('admin.event-logs.index') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Logs</a>
-            <a class="link" href="{{ route('admin.tools.license-validation') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">License validation</a>
+            @if(config('license.enabled') && config('license.public_validation'))
+                <a class="link" href="{{ route('admin.tools.license-validation') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">License validation</a>
+            @endif
             <a class="link" href="{{ route('email.test') }}" style="display:block;text-align:center;padding:0.65rem 0.9rem;border:1px solid rgba(15,23,42,0.12);border-radius:0.9rem;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,0.08);font-weight:600;">Send test email</a>
         </div>
     </section>
@@ -84,7 +88,9 @@
         </div>
     @endif
 
-    @if ($products->isEmpty())
+    @if (! config('license.enabled') || ! config('license.purchase_enabled'))
+        <p style="margin-top:1.25rem;color:var(--muted);">Licenses are not available.</p>
+    @elseif ($products->isEmpty())
         <p style="margin-top:1.25rem;color:var(--muted);">No products are available for purchase right now. Please check back later.</p>
     @else
         @if ($paypalEnabled)
@@ -180,7 +186,7 @@
         </div>
         @endif
     @endif
-</section>
+    </section>
 
 <section class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
@@ -246,6 +252,7 @@
         </table>
     </div>
 </section>
+@endif
 @endsection
 
 @push('scripts')
