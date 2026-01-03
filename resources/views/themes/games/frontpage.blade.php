@@ -96,7 +96,13 @@
                         @if(!empty($product->description))
                             <p>{{ \Illuminate\Support\Str::limit($product->description, 100) }}</p>
                         @endif
-                        <span class="play-btn">{{ $product->name }}</span>
+                        <div style="display:flex;gap:0.5rem;align-items:center;">
+                            <span class="play-btn">{{ $product->name }}</span>
+                            @auth
+                                @php $fav = $product->isFavoritedBy(auth()->user()); @endphp
+                                <button type="button" class="link button-reset favorite-btn" data-type="product" data-id="{{ $product->id }}" aria-pressed="{{ $fav ? 'true' : 'false' }}">@if($fav)♥@else♡@endif</button>
+                            @endauth
+                        </div>
                     </div>
                 </a>
             @endforeach
@@ -213,6 +219,39 @@
                 });
             })();
         </script>
+            <script>
+                (function () {
+                    async function toggleFav(btn) {
+                        const type = btn.dataset.type;
+                        const id = btn.dataset.id;
+                        const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || document.querySelector('input[name="_token"]')?.value;
+                        try {
+                            const res = await fetch('{{ route('favorites.toggle') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': token,
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({ type: type, id: id })
+                            });
+                            if (!res.ok) throw new Error('Request failed');
+                            const json = await res.json();
+                            btn.setAttribute('aria-pressed', json.favorited ? 'true' : 'false');
+                            btn.textContent = json.favorited ? '♥' : '♡';
+                        } catch (e) {
+                            console.error('Favourite toggle error', e);
+                        }
+                    }
+
+                    document.addEventListener('click', function (e) {
+                        const btn = e.target.closest && e.target.closest('.favorite-btn');
+                        if (!btn) return;
+                        e.preventDefault();
+                        toggleFav(btn);
+                    });
+                })();
+            </script>
     </section>
 
 @endsection

@@ -109,6 +109,9 @@ Route::middleware('auth')->group(function () {
         Route::get('media/create', [App\Http\Controllers\Admin\MediaController::class, 'create'])->name('media.create');
         Route::post('media', [App\Http\Controllers\Admin\MediaController::class, 'store'])->name('media.store');
         Route::delete('media/{media}', [App\Http\Controllers\Admin\MediaController::class, 'destroy'])->name('media.destroy');
+    
+    // favourites
+    Route::post('/favorites', [App\Http\Controllers\FavouriteController::class, 'toggle'])->name('favorites.toggle');
 });
 
 if (config('license.enabled') && config('license.purchase_enabled')) {

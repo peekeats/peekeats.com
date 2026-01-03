@@ -36,4 +36,15 @@ class Product extends Model
     {
         return $this->belongsTo(Media::class);
     }
+
+    public function favourites()
+    {
+        return $this->morphMany(Favourite::class, 'favoritable');
+    }
+
+    public function isFavoritedBy(?\App\Models\User $user): bool
+    {
+        if (! $user) return false;
+        return $this->favourites()->where('user_id', $user->id)->exists();
+    }
 }
