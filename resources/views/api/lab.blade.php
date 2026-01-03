@@ -17,87 +17,95 @@
     </div>
 </header>
 
-<section class="card">
-    <form id="license-test-form" style="display:grid;gap:1rem;">
-        <label>
-            <span>License code</span>
-            <input type="text" name="license_code" placeholder="ABCD-EFGH-IJKL" required>
-        </label>
-        <button type="submit">Validate license</button>
-    </form>
-</section>
+@if(config('license.public_validation'))
+    <section class="card">
+        <form id="license-test-form" style="display:grid;gap:1rem;">
+            <label>
+                <span>License code</span>
+                <input type="text" name="license_code" placeholder="ABCD-EFGH-IJKL" required>
+            </label>
+            <button type="submit">Validate license</button>
+        </form>
+    </section>
 
-<section class="card" id="result-card" style="display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
-        <h2 style="margin:0;">Response</h2>
-        <span id="status-pill" style="border-radius:999px;padding:0.25rem 0.75rem;font-weight:600;"></span>
-    </div>
-    <pre id="result-json" style="margin-top:1rem;background:var(--bg);padding:1rem;border-radius:0.75rem;overflow:auto;"></pre>
-</section>
+    <section class="card" id="result-card" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+            <h2 style="margin:0;">Response</h2>
+            <span id="status-pill" style="border-radius:999px;padding:0.25rem 0.75rem;font-weight:600;"></span>
+        </div>
+        <pre id="result-json" style="margin-top:1rem;background:var(--bg);padding:1rem;border-radius:0.75rem;overflow:auto;"></pre>
+    </section>
 
-<section class="card" id="error-card" style="display:none;">
-    <h2 style="margin-top:0;">Error</h2>
-    <p id="error-message" style="color:var(--error);"></p>
-</section>
-@endsection
+    <section class="card" id="error-card" style="display:none;">
+        <h2 style="margin-top:0;">Error</h2>
+        <p id="error-message" style="color:var(--error);"></p>
+    </section>
 
-@push('scripts')
-<script>
-(function () {
-    const form = document.getElementById('license-test-form');
-    const resultCard = document.getElementById('result-card');
-    const errorCard = document.getElementById('error-card');
-    const statusPill = document.getElementById('status-pill');
-    const resultJson = document.getElementById('result-json');
-    const errorMessage = document.getElementById('error-message');
+    @push('scripts')
+    <script>
+    (function () {
+        const form = document.getElementById('license-test-form');
+        const resultCard = document.getElementById('result-card');
+        const errorCard = document.getElementById('error-card');
+        const statusPill = document.getElementById('status-pill');
+        const resultJson = document.getElementById('result-json');
+        const errorMessage = document.getElementById('error-message');
 
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        errorCard.style.display = 'none';
-        resultCard.style.display = 'none';
-        const formData = new FormData(form);
-        const payload = {
-            license_code: formData.get('license_code'),
-        };
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            errorCard.style.display = 'none';
+            resultCard.style.display = 'none';
+            const formData = new FormData(form);
+            const payload = {
+                license_code: formData.get('license_code'),
+            };
 
-        try {
-            const response = await fetch('{{ url('/api/licenses/validate') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
-
-            let json;
             try {
-                json = await response.json();
-            } catch (parseError) {
-                throw new Error('Received an unreadable response from the API.');
-            }
+                const response = await fetch('{{ url('/api/licenses/validate') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
 
-            if (!response.ok) {
-                const message = json?.reason || json?.message || 'Request failed with status ' + response.status;
-                throw new Error(message);
-            }
+                let json;
+                try {
+                    json = await response.json();
+                } catch (parseError) {
+                    throw new Error('Received an unreadable response from the API.');
+                }
 
-            statusPill.textContent = json.valid ? 'VALID' : 'INVALID';
-            statusPill.style.background = json.valid ? 'rgba(22, 163, 74, 0.15)' : 'rgba(220, 38, 38, 0.15)';
-            statusPill.style.color = json.valid ? 'var(--success)' : 'var(--error)';
-            resultJson.textContent = JSON.stringify(json, null, 2);
-            resultCard.style.display = 'block';
+                if (!response.ok) {
+                    const message = json?.reason || json?.message || 'Request failed with status ' + response.status;
+                    throw new Error(message);
+                }
 
-            if (!json.valid) {
-                const reason = json.reason ? 'License is not valid: ' + json.reason : 'License is not valid.';
-                errorMessage.textContent = reason;
+                statusPill.textContent = json.valid ? 'VALID' : 'INVALID';
+                statusPill.style.background = json.valid ? 'rgba(22, 163, 74, 0.15)' : 'rgba(220, 38, 38, 0.15)';
+                statusPill.style.color = json.valid ? 'var(--success)' : 'var(--error)';
+                resultJson.textContent = JSON.stringify(json, null, 2);
+                resultCard.style.display = 'block';
+
+                if (!json.valid) {
+                    const reason = json.reason ? 'License is not valid: ' + json.reason : 'License is not valid.';
+                    errorMessage.textContent = reason;
+                    errorCard.style.display = 'block';
+                }
+            } catch (error) {
+                resultCard.style.display = 'none';
+                errorMessage.textContent = error.message || 'Unable to reach the API.';
                 errorCard.style.display = 'block';
             }
-        } catch (error) {
-            resultCard.style.display = 'none';
-            errorMessage.textContent = error.message || 'Unable to reach the API.';
-            errorCard.style.display = 'block';
-        }
-    });
-})();
-</script>
-@endpush
+        });
+    })();
+    </script>
+    @endpush
+@else
+    <section class="card">
+        <p style="margin:0;color:var(--muted);">License validation is disabled.</p>
+    </section>
+@endif
+@endsection
+
+

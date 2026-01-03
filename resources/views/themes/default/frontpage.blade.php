@@ -24,6 +24,7 @@
 
 <section class="card">
     <div class="grid">
+        @if(config('license.enabled'))
         <article>
             <p class="eyebrow" style="margin-bottom:0.35rem;">01 · Self-serve licenses</p>
             <h2 style="margin-top:0;">Purchase seats from the catalog</h2>
@@ -34,6 +35,8 @@
             @endif
             @endif
         </article>
+        @endif
+        @if(config('license.public_validation'))
         <article>
             <p class="eyebrow" style="margin-bottom:0.35rem;">02 · API validation</p>
             <h2 style="margin-top:0;">Verify entitlements programmatically</h2>
@@ -42,6 +45,7 @@
             <a class="link" href="{{ url('/api-lab') }}">Open the API Lab</a>
             @endif
         </article>
+        @endif
         <article>
             <p class="eyebrow" style="margin-bottom:0.35rem;">03 · Admin tooling</p>
             <h2 style="margin-top:0;">Manage users, products, and licenses</h2>
