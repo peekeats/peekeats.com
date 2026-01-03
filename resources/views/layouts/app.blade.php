@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-                @else
-                    @if(config('shop.enabled'))
-                        <button type="button" class="link button-reset" onclick="window.location='{{ url('/shop') }}'">Shop</button>
-                    @endif
-                        @if(config('apilab.enabled') && Route::has('api.lab'))
-                            <button type="button" class="link button-reset" onclick="window.location='{{ route('api.lab') }}'">API Lab</button>
-                        @endif
-                        @if(config('games.enabled') && Route::has('games.index'))
-                            <button type="button" class="link button-reset" onclick="window.location='{{ route('games.index') }}'">Games</button>
-                        @endif
-                        @if(config('posts.enabled') && Route::has('posts.index'))
-                            <button type="button" class="link button-reset" onclick="window.location='{{ route('posts.index') }}'">Posts</button>
-                        @endif
-                    <button type="button" class="link button-reset" onclick="window.location='{{ route('login') }}'">Login</button>
-                    <button type="button" class="link button-reset" onclick="window.location='{{ route('register') }}'">Register</button>
-                @endauth
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ config('site.name') }}</title>
+    <style>
+    :root{
             --muted: #6b7280;
             --primary: #2563eb;
             --primary-dark: #1e40af;
