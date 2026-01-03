@@ -198,7 +198,7 @@
     </div>
 
     <div style="margin-top:1rem;">
-        <div class="favorites-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem;">
+        <div id="dashboard-games-tiles" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;align-items:start;">
             @if(isset($favorites) && $favorites->count())
                 @foreach($favorites as $fav)
                     @php
@@ -209,9 +209,18 @@
                         }
                         $thumb = $thumb ?: asset('assets/games/joystick.svg');
                         $href = $product->url ?? url('/shop/' . ($product->product_code ?? ''));
+                        $isExternal = ! empty($product->url);
                     @endphp
-                    <a href="{{ $href }}" class="fav-tile" style="display:block;position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background-image:url('{{ $thumb }}');background-size:cover;background-position:center;">
-                        <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:0.6rem;background:linear-gradient(180deg,transparent,rgba(0,0,0,0.5));color:#fff;font-weight:700;">{{ $product->name }}</div>
+                    <a href="{{ $href }}" @if($isExternal) target="_blank" rel="noopener" @endif class="arcade-tile" style="background-image:url('{{ $thumb }}');">
+                        <div class="arcade-tile-overlay">
+                            <h3>{{ $product->name }}</h3>
+                            @if(!empty($product->description))
+                                <p>{{ \Illuminate\Support\Str::limit($product->description, 100) }}</p>
+                            @endif
+                            <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.35rem;">
+                                <span class="play-btn">Play</span>
+                            </div>
+                        </div>
                     </a>
                 @endforeach
             @else
