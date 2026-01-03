@@ -252,9 +252,7 @@
                     <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'nav-active' : '' }}">Dashboard</a>
                     <a href="{{ route('profile.show') }}" class="{{ request()->routeIs('profile.show') ? 'nav-active' : '' }}">Profile</a>
                     @if(config('shop.enabled'))
-                        @if(config('shop.enabled'))
-                            <a href="{{ url('/shop') }}" class="{{ request()->routeIs('shop') || request()->routeIs('shop.products.show') ? 'nav-active' : '' }}">Shop</a>
-                        @endif
+                        <a href="{{ url('/shop') }}" class="{{ request()->routeIs('shop') || request()->routeIs('shop.products.show') ? 'nav-active' : '' }}">Shop</a>
                     @endif
                         @if(config('apilab.enabled') && Route::has('api.lab'))
                             <a href="{{ route('api.lab') }}" class="{{ request()->routeIs('api.lab') ? 'nav-active' : '' }}">API Lab</a>
@@ -267,9 +265,7 @@
                         @endif
                 @else
                     @if(config('shop.enabled'))
-                        @if(config('shop.enabled'))
-                            <a href="{{ url('/shop') }}" class="{{ request()->routeIs('shop') || request()->routeIs('shop.products.show') ? 'nav-active' : '' }}">Shop</a>
-                        @endif
+                        <a href="{{ url('/shop') }}" class="{{ request()->routeIs('shop') || request()->routeIs('shop.products.show') ? 'nav-active' : '' }}">Shop</a>
                     @endif
                         @if(config('apilab.enabled') && Route::has('api.lab'))
                             <a href="{{ route('api.lab') }}" class="{{ request()->routeIs('api.lab') ? 'nav-active' : '' }}">API Lab</a>
